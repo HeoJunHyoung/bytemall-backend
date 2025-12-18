@@ -50,8 +50,12 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@AuthenticationPrincipal AuthMember authMember) {
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal AuthMember authMember, HttpServletResponse response) {
         authService.logout(authMember.getId());
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookieUtil.createExpiredCookie("accessToken").toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookieUtil.createExpiredCookie("refreshToken").toString());
+
         return ResponseEntity.ok().build();
     }
 
