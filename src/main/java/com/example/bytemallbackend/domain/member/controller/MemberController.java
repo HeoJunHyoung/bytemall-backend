@@ -17,7 +17,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<MemberResponse> getMyInfo(@AuthenticationPrincipal AuthMember authMember) {
         MemberResponse memberResponse = memberService.getMyInfo(authMember.getId());
         return ResponseEntity.ok(memberResponse);
