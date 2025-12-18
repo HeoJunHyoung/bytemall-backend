@@ -27,6 +27,8 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
 
+    //
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
