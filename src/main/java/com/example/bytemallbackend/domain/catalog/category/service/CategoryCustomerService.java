@@ -56,7 +56,7 @@ public class CategoryCustomerService {
         Map<String, List<CategoryHierarchyResponse>> resultMap = new LinkedHashMap<>();
         // Enum 순서대로 미리 Map 초기화 (안 해도 되지만 순서 보장을 위해)
         for (RootCategory rc : RootCategory.values()) {
-            resultMap.put(rc.name(), new ArrayList<>());
+            resultMap.put(rc.getDescription(), new ArrayList<>());
         }
 
         /**
@@ -76,7 +76,7 @@ public class CategoryCustomerService {
 
             if (category.getParent() == null) {
                 // 1뎁스(최상위)라면 결과 맵(RootCategory 그룹)에 바로 추가
-                resultMap.get(category.getRootCategory().name()).add(currentDto);
+                resultMap.get(category.getRootCategory().getDescription()).add(currentDto);
             } else {
                 // 하위 뎁스라면 부모 DTO를 찾아 자식으로 연결
                 CategoryHierarchyResponse parentDto = dtoMap.get(category.getParent().getId());

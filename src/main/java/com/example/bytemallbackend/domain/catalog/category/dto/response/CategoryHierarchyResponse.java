@@ -16,9 +16,11 @@ public class CategoryHierarchyResponse {
     private String name;
     private Integer depth;
     private Integer displayOrder;
-    private List<CategoryHierarchyResponse> children = new ArrayList<>(); // 자식 카테고리 리스트 (무한 중첩)
     private RootCategory rootCategory; // 그룹핑 용도
 
+    // 빌더 패턴을 사용할 때 컬렉션 필드(List, Set 등)가 포함되어 있다면 항상 @Builder.Default를 사용
+    @Builder.Default
+    private List<CategoryHierarchyResponse> children = new ArrayList<>(); // 자식 카테고리 리스트 (무한 중첩)
 
     public static CategoryHierarchyResponse from(Category category) {
         return CategoryHierarchyResponse.builder()

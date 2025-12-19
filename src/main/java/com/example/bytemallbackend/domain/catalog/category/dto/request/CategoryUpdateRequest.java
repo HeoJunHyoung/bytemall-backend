@@ -1,10 +1,12 @@
 package com.example.bytemallbackend.domain.catalog.category.dto.request;
 
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
+@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryUpdateRequest {
 
     private Long categoryId;          // 어떤 카테고리인지 식별
