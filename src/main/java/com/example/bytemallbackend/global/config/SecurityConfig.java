@@ -1,5 +1,6 @@
 package com.example.bytemallbackend.global.config;
 
+import com.example.bytemallbackend.domain.member.entity.enumerate.Role;
 import com.example.bytemallbackend.global.security.jwt.JwtAuthenticationFilter;
 import com.example.bytemallbackend.global.security.jwt.JwtTokenProvider;
 import com.example.bytemallbackend.global.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
@@ -61,8 +62,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/login/**").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/members/**").hasRole("CUSTOMER")
-                        .requestMatchers("/admin/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole(String.valueOf(Role.ADMIN))
                         .anyRequest().authenticated());
 
         http.exceptionHandling(exception -> exception
