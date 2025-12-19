@@ -1,5 +1,6 @@
 package com.example.bytemallbackend.domain.catalog.product.repository;
 
+import com.example.bytemallbackend.domain.catalog.category.entity.enumerate.RootCategory;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             countQuery = "SELECT COUNT(p) FROM Product p")
     Page<Product> findAll(Pageable pageable);
 
+    // [루트 카테고리(enum)별 상품]
+    @Query(value = "SELECT p FROM Product p JOIN FETCH p.category c WHERE c.rootCategory = :rootCategory",
+            countQuery = "SELECT COUNT(p) FROM Product p JOIN p.category c WHERE c.rootCategory = :rootCategory")
+    Page<Product> findAllByRootCategory(@Param("rootCategory") RootCategory rootCategory, Pageable pageable);
+
     // [카테고리 별 상품]
     @Query(value = "SELECT p FROM Product p JOIN FETCH p.category c " +
             "WHERE c.path = :categoryPath OR c.path LIKE CONCAT(:categoryPath, '/%')",
@@ -46,5 +52,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                    "WHERE (c.path = :categoryPath OR c.path LIKE CONCAT(:categoryPath, '/%')) " +
                    "AND p.name LIKE CONCAT('%', :keyword, '%')")
     Page<Product> findByCategoryPathWithKeyword(@Param("categoryPath") String categoryPath, @Param("keyword") String keyword, Pageable pageable);
+
+    // [대분류(RootCategory)] + [키워드 검색]
+    @Query(value = "SELECT p FROM Product p JOIN FETCH p.category c " +
+            "WHERE c.rootCategory = :rootCategory AND p.name LIKE CONCAT('%', :keyword, '%')",
+            countQuery = "SELECT COUNT(p) FROM Product p JOIN p.category c " +
+                    "WHERE c.rootCategory = :rootCategory AND p.name LIKE CONCAT('%', :keyword, '%')")
+    Page<Product> findAllByRootCategoryAndKeyword(@Param("rootCategory") RootCategory rootCategory,
+                                                  @Param("keyword") String keyword,
+                                                  Pageable pageable);
 
 }

@@ -23,9 +23,10 @@ public class ProductCustomerController {
     @GetMapping
     public ResponseEntity<Page<ProductCustomerResponse>> getProducts(
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String rootCategory,
             @RequestParam(required = false) String keyword,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<ProductCustomerResponse> products = productCustomerService.getProducts(categoryId, keyword, pageable);
+            @PageableDefault(size = 12, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ProductCustomerResponse> products = productCustomerService.getProducts(categoryId, rootCategory, keyword, pageable);
         return ResponseEntity.ok(products);
     }
 

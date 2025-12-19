@@ -23,4 +23,19 @@ public enum RootCategory {
         this.description = description;
     }
 
+    public static RootCategory findByName(String name) {
+        for (RootCategory category : values()) {
+            // 1. "패션" == "패션" (한글 매칭)
+            if (category.getDescription().equals(name)) {
+                return category;
+            }
+            // 2. "FASHION" == "FASHION" (영어 매칭 - 대소문자 무관하게 처리)
+            if (category.name().equalsIgnoreCase(name)) {
+                return category;
+            }
+        }
+        // 못 찾으면 null 반환
+        return null;
+    }
+
 }
