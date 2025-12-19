@@ -24,7 +24,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     /**
      * 2. [ADMIN] 특정 RootCategory에 속한 '모든' 카테고리 조회: 계층 정렬은 Service에서 수행
      */
-    List<Category> findAllByRootCategory(RootCategory rootCategory);
+    @Query("SELECT c FROM Category c WHERE c.rootCategory = :rootCategory ORDER BY c.path ASC, c.displayOrder ASC")
+    List<Category> findAllByRootCategory(@Param("rootCategory") RootCategory rootCategory);
 
     /**
      * 3. [CUSTOMER] 메인 페이지 접근할 때 전체 카테고리 목록 조회

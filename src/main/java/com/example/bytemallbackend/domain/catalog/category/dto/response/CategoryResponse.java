@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CategoryResponse {
-    private Long id;
+    private Long categoryId;
     private String name;
     private Integer depth;
     private Integer displayOrder;
@@ -15,7 +15,7 @@ public class CategoryResponse {
 
     public static CategoryResponse from(Category category) {
         return CategoryResponse.builder()
-                .id(category.getId())
+                .categoryId(category.getId())
                 .name(category.getName())
                 .depth(category.getDepth())
                 .displayOrder(category.getDisplayOrder())

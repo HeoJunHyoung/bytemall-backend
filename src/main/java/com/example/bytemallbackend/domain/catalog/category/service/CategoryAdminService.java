@@ -167,7 +167,13 @@ public class CategoryAdminService {
      * ㄴ 2. 다시 0L로 돌아옴
      *      ㄴ 하의(ID:2)를 result에 추가. -> [상의, 셔츠, 반팔, 하의]
      *
-     * [최종 결과]: [상의, 셔츠, 반팔, 하의] 순서로 정렬된 리스트 반환.
+     * 최종 결과: [상의, 셔츠, 반팔, 하의] 순서로 정렬된 리스트 반환.
+     *  [
+     *      { "id": 1, "name": "상의", "depth": 1, "parentId": null },
+     *      { "id": 4, "name": "셔츠", "depth": 2, "parentId": 1 },
+     *      { "id": 3, "name": "반팔", "depth": 2, "parentId": 1 },
+     *      { "id": 2, "name": "하의", "depth": 1, "parentId": null }
+     *  ]
      */
     private void sortCategoriesRecursive(Long parentId, Map<Long, List<Category>> map, List<CategoryResponse> result) {
         List<Category> children = map.get(parentId);
@@ -175,12 +181,11 @@ public class CategoryAdminService {
         if (children == null) return; // 자식이 없으면 종료
 
         // displayOrder 순으로 정렬
-        children.sort(Comparator.comparingInt(Category::getDisplayOrder));
+        children.sort((c1, c2) -> c1.getDisplayOrder() - c2.getDisplayOrder());
 
         for (Category child : children) {
             // 1. 부모 추가
             result.add(CategoryResponse.from(child));
-
             // 2. 이 자식의 자식들을 찾아 바로 밑에 추가 (재귀)
             sortCategoriesRecursive(child.getId(), map, result);
         }
