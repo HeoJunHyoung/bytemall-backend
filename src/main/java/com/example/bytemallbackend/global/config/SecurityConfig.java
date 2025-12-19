@@ -63,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/login/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/admin/**").hasRole(String.valueOf(Role.ADMIN))
+                        .requestMatchers("/api/seller/**").hasRole(String.valueOf(Role.SELLER))
                         .anyRequest().authenticated());
 
         http.exceptionHandling(exception -> exception

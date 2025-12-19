@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,7 +50,7 @@ public class CategoryAdminService {
             maxDisplayOrder = categoryRepository.findMaxDisplayOrderByRootCategory(request.getRootCategory());
         }
         // 형제가 없어서 null이 반환되면 1번, 아니면 max + 1
-        int nextDisplayOrder = (maxDisplayOrder == null) ? 1 : maxDisplayOrder + 1;
+        Integer nextDisplayOrder = (maxDisplayOrder == null) ? 1 : maxDisplayOrder + 1;
 
         // 3. 엔티티 생성
         Category newCategory = Category.of(
@@ -78,7 +77,7 @@ public class CategoryAdminService {
             newPath = String.valueOf(newCategoryId);
         }
 
-        newCategory.updatePath(newPath);
+        newCategory.changePath(newPath);
 
         return newCategoryId;
     }
@@ -116,6 +115,19 @@ public class CategoryAdminService {
                 category.changeDisplayOrder(request.getDisplayOrder());
             }
         }
+    }
+
+    /**
+     * 카테고리 삭제
+     * ㄴ 하위 카테고리까지 모두 삭제됨 (CascadeType.ALL)
+     * ㄴ 단, 상품이 연결되어 있다면 예외 발생 (FK 제약조건)
+     */
+    @Transactional
+    public void deleteCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new BusinessException(CategoryErrorCode.CATEGORY_NOT_FOUND));
+        // TODO: 상품 연결되어 있는 부분 예외 처리 해줘야 함
+        categoryRepository.delete(category);
     }
 
     /**
@@ -191,17 +203,6 @@ public class CategoryAdminService {
         }
     }
     
-    /**
-     * 카테고리 삭제
-     * ㄴ 하위 카테고리까지 모두 삭제됨 (CascadeType.ALL)
-     * ㄴ 단, 상품이 연결되어 있다면 예외 발생 (FK 제약조건)
-     */
-    @Transactional
-    public void deleteCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BusinessException(CategoryErrorCode.CATEGORY_NOT_FOUND));
-        // TODO: 상품 연결되어 있는 부분 예외 처리 해줘야 함
-        categoryRepository.delete(category);
-    }
+
 
 }

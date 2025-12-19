@@ -14,7 +14,7 @@ public enum CategoryErrorCode implements ErrorCode {
     private final String code;
     private final String message;
 
-    private CategoryErrorCode(HttpStatus status, String code, String message) {
+    CategoryErrorCode(HttpStatus status, String code, String message) {
         this.status = status;
         this.code = code;
         this.message = message;

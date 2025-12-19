@@ -79,7 +79,7 @@ public class Category extends BaseEntity {
     }
 
     // 카테고리 경로 변경 메서드
-    public void updatePath(String path) {
+    public void changePath(String path) {
         this.path = path;
     }
 

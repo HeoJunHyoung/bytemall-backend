@@ -180,3 +180,7 @@ VALUES (1, 'admin', '$2a$10$5n5tLjiitv4esmk.QVCwjuG/hARJFt2rhd6Q.ur1/QwAW4PmeRqJ
 -- 판매자 (ID: 2) / 비밀번호: 1234
 INSERT IGNORE INTO members (member_id, username, password, role, grade, created_at, last_modified_at)
 VALUES (2, 'seller', '$2a$10$eASvfc8sqvTPPRfOJiC3XexodIHZOz6V2Q5zLZQ4RkNFYSExqzpIu', 'SELLER', 'IRON', NOW(), NOW());
+
+-- 구매자 (ID: 3) / 비밀번호: 1234
+INSERT IGNORE INTO members (member_id, username, password, role, grade, created_at, last_modified_at)
+VALUES (3, 'qwe', '$2a$10$eASvfc8sqvTPPRfOJiC3XexodIHZOz6V2Q5zLZQ4RkNFYSExqzpIu', 'CUSTOMER', 'IRON', NOW(), NOW());
