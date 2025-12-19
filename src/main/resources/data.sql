@@ -7,29 +7,61 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- 1. FASHION (패션) - ID 대역: 100~
 -- ==========================================
 
--- 1뎁스
+-- 1뎁스: 성별 분류
 INSERT INTO categories
 (category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
 VALUES
-    (101, 'FASHION', '여성의류', NULL, 1, 1, '101', NOW(), NOW()),
-    (102, 'FASHION', '남성의류', NULL, 1, 2, '102', NOW(), NOW()),
-    (103, 'FASHION', '언더웨어', NULL, 1, 3, '103', NOW(), NOW());
+    (101, 'FASHION', '여성', NULL, 1, 1, '101', NOW(), NOW()),
+    (102, 'FASHION', '남성', NULL, 1, 2, '102', NOW(), NOW());
 
--- 2뎁스 (여성의류 하위)
+-- 2뎁스 (여성 하위: 상의/하의 등)
 INSERT INTO categories
 (category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
 VALUES
-    (104, 'FASHION', '티셔츠', 101, 2, 1, '101/104', NOW(), NOW()),
-    (105, 'FASHION', '블라우스', 101, 2, 2, '101/105', NOW(), NOW()),
-    (106, 'FASHION', '원피스', 101, 2, 3, '101/106', NOW(), NOW());
+    (111, 'FASHION', '상의', 101, 2, 1, '101/111', NOW(), NOW()),
+    (112, 'FASHION', '하의', 101, 2, 2, '101/112', NOW(), NOW()),
+    (113, 'FASHION', '원피스', 101, 2, 3, '101/113', NOW(), NOW()),
+    (114, 'FASHION', '아우터', 101, 2, 4, '101/114', NOW(), NOW());
 
--- 2뎁스 (남성의류 하위)
+-- 3뎁스 (여성 상의 하위 세부항목)
 INSERT INTO categories
 (category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
 VALUES
-    (107, 'FASHION', '셔츠/남방', 102, 2, 1, '102/107', NOW(), NOW()),
-    (108, 'FASHION', '슬랙스', 102, 2, 2, '102/108', NOW(), NOW());
+    (121, 'FASHION', '티셔츠', 111, 3, 1, '101/111/121', NOW(), NOW()),
+    (122, 'FASHION', '블라우스', 111, 3, 2, '101/111/122', NOW(), NOW()),
+    (123, 'FASHION', '셔츠', 111, 3, 3, '101/111/123', NOW(), NOW());
 
+-- 3뎁스 (여성 하의 하위 세부항목)
+INSERT INTO categories
+(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
+VALUES
+    (124, 'FASHION', '청바지', 112, 3, 1, '101/112/124', NOW(), NOW()),
+    (125, 'FASHION', '슬랙스', 112, 3, 2, '101/112/125', NOW(), NOW()),
+    (126, 'FASHION', '스커트', 112, 3, 3, '101/112/126', NOW(), NOW());
+
+-- 2뎁스 (남성 하위: 상의/하의 등)
+INSERT INTO categories
+(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
+VALUES
+    (131, 'FASHION', '상의', 102, 2, 1, '102/131', NOW(), NOW()),
+    (132, 'FASHION', '하의', 102, 2, 2, '102/132', NOW(), NOW()),
+    (133, 'FASHION', '아우터', 102, 2, 3, '102/133', NOW(), NOW());
+
+-- 3뎁스 (남성 상의 하위 세부항목)
+INSERT INTO categories
+(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
+VALUES
+    (141, 'FASHION', '티셔츠', 131, 3, 1, '102/131/141', NOW(), NOW()),
+    (142, 'FASHION', '셔츠/남방', 131, 3, 2, '102/131/142', NOW(), NOW()),
+    (143, 'FASHION', '맨투맨/후드', 131, 3, 3, '102/131/143', NOW(), NOW());
+
+-- 3뎁스 (남성 하의 하위 세부항목)
+INSERT INTO categories
+(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
+VALUES
+    (144, 'FASHION', '청바지', 132, 3, 1, '102/132/144', NOW(), NOW()),
+    (145, 'FASHION', '슬랙스', 132, 3, 2, '102/132/145', NOW(), NOW()),
+    (146, 'FASHION', '반바지', 132, 3, 3, '102/132/146', NOW(), NOW());
 
 -- ==========================================
 -- 2. BEAUTY (뷰티) - ID 대역: 200~
@@ -103,6 +135,18 @@ VALUES
     (505, 'ELECTRONICS', '데스크탑', 501, 2, 2, '501/505', NOW(), NOW()),
     (506, 'ELECTRONICS', '모니터', 501, 2, 3, '501/506', NOW(), NOW());
 
+-- 3뎁스
+INSERT INTO categories
+(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
+VALUES
+    (507, 'ELECTRONICS', '게이밍 노트북', 504, 3, 1, '501/504/507', NOW(), NOW()),
+    (508, 'ELECTRONICS', '울트라북', 504, 3, 2, '501/504/508', NOW(), NOW());
+
+INSERT INTO categories
+(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
+VALUES
+    (509, 'ELECTRONICS', '게이밍 PC', 505, 3, 1, '501/505/509', NOW(), NOW()),
+    (510, 'ELECTRONICS', '사무용 PC', 505, 3, 2, '501/505/510', NOW(), NOW());
 
 -- ==========================================
 -- 6. FURNITURE (가구/인테리어) - ID 대역: 600~
@@ -127,18 +171,7 @@ VALUES
 
 
 -- ==========================================
--- 8. HEALTH (헬스/건강) - ID 대역: 800~
--- ==========================================
-INSERT INTO categories
-(category_id, root_category, name, parent_id, depth, display_order, path, created_at, last_modified_at)
-VALUES
-    (801, 'HEALTH', '영양제', NULL, 1, 1, '801', NOW(), NOW()),
-    (802, 'HEALTH', '헬스용품', NULL, 1, 2, '802', NOW(), NOW()),
-    (803, 'HEALTH', '다이어트식품', NULL, 1, 3, '803', NOW(), NOW());
-
-
--- ==========================================
--- 12. MEMBERS (회원 초기 데이터)
+-- 99. MEMBERS (회원 초기 데이터)
 -- ==========================================
 -- 관리자 (ID: 1) / 비밀번호: 1234
 INSERT IGNORE INTO members (member_id, username, password, role, grade, created_at, last_modified_at)

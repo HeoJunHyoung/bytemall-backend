@@ -64,7 +64,7 @@ public class Category extends BaseEntity {
     }
 
     // == 연관관계 편의 메서드 == //
-    public void addChildren(Category child) { // 호출 주체가 request가 아님(그 request의 부모가 호출한다는 전제하에 만든 편의 메서드임)
+    public void assignChild(Category child) { // 호출 주체가 request가 아님(그 request의 부모가 호출한다는 전제하에 만든 편의 메서드임)
         this.children.add(child);
         child.parent = this;
     }

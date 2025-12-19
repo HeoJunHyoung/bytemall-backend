@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,7 +64,7 @@ public class CategoryAdminService {
 
         // 4. 연관관계 설정 (부모가 존재할 경우에만 수행)
         if (parentCategory != null) {
-            parentCategory.addChildren(newCategory);
+            parentCategory.assignChild(newCategory);
         }
 
         // 5. DB 1차 저장 (Id를 가져오기 위햬)

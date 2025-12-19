@@ -21,25 +21,8 @@ public class CategoryAdminController {
 
     private final CategoryAdminService categoryAdminService;
 
-    @GetMapping // (GET) /api/categories?root=FASHION
-    public ResponseEntity<List<CategoryResponse>> getCategories(@RequestParam("root") RootCategory rootCategory) {
-        List<CategoryResponse> responses = categoryAdminService.getCategoriesByRoot(rootCategory);
-        return ResponseEntity.ok(responses);
-    }
-
-    @PostMapping  // (POST) /api/categories
-    public ResponseEntity<Long> createCategory(@RequestBody CategoryCreateRequest request) {
-        Long categoryId = categoryAdminService.createCategory(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryId);
-    }
-
-    @PutMapping("/batch") // (PUT) /api/categories/batch
-    public ResponseEntity<Void> updateCategoriesBatch(@RequestBody List<CategoryUpdateRequest> requests) {
-        categoryAdminService.updateCategoriesBatch(requests);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/roots") // (GET) /api/categories/roots
+    // 루트 카테고리(Enum) 목록 조회: 관리자가 어떤 카테고리 목록들이 있는지 보기 위한 API
+    @GetMapping("/roots")
     public ResponseEntity<List<RootCategoryResponse>> getRootCategories() {
         List<RootCategoryResponse> roots = Arrays.stream(RootCategory.values())
                 .map(RootCategoryResponse::fromEnum)
@@ -48,7 +31,26 @@ public class CategoryAdminController {
         return ResponseEntity.ok(roots);
     }
 
-    @DeleteMapping("/{categoryId}") // (DELETE) /api/categories/{categoryId}
+    // 카테고리 목록 조회: 루트 카테고리 하위에 있는 카테고리 목록 조회 API
+    @GetMapping
+    public ResponseEntity<List<CategoryResponse>> getCategories(@RequestParam("root") RootCategory rootCategory) {
+        List<CategoryResponse> responses = categoryAdminService.getCategoriesByRoot(rootCategory);
+        return ResponseEntity.ok(responses);
+    }
+
+    @PostMapping
+    public ResponseEntity<Long> createCategory(@RequestBody CategoryCreateRequest request) {
+        Long categoryId = categoryAdminService.createCategory(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryId);
+    }
+
+    @PutMapping("/batch")
+    public ResponseEntity<Void> updateCategoriesBatch(@RequestBody List<CategoryUpdateRequest> requests) {
+        categoryAdminService.updateCategoriesBatch(requests);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
         categoryAdminService.deleteCategory(categoryId);
         return ResponseEntity.noContent().build();

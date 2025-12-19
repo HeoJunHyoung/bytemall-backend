@@ -15,8 +15,7 @@ public enum RootCategory {
     DAILY("생필품"),
     ELECTRONICS("가전/디지털"),
     FURNITURE("가구/인테리어"),
-    BOOK("도서/문구"),
-    HEALTH("헬스/건강");
+    BOOK("도서/문구");
 
     private final String description;
 
