@@ -1,6 +1,7 @@
 package com.example.bytemallbackend.domain.member.dto.response;
 
 import com.example.bytemallbackend.domain.member.entity.MemberAddress;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ public class MemberAddressResponse {
     private String zipcode;
     private String roadAddress;
     private String detailAddress;
+    @JsonProperty("isDefault")
     private boolean isDefault;
 
     public MemberAddressResponse(Long id, String addressName, String recipientName,

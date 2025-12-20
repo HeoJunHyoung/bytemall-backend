@@ -54,6 +54,12 @@ public class OrderService {
             // 저장된 배송지 사용
             MemberAddress ma = memberAddressRepository.findById(request.getDeliveryAddressId())
                     .orElseThrow(() -> new BusinessException(MemberErrorCode.ADDRESS_NOT_FOUND));
+
+            // 내 주소가 맞는지 검증
+            if (!ma.getMember().getId().equals(memberId)) {
+                throw new BusinessException(MemberErrorCode.ADDRESS_NOT_FOUND); // 혹은 UNAUTHORIZED_ACCESS
+            }
+
             address = ma.getAddress();
         } else {
             // 신규 입력 주소 사용
@@ -100,6 +106,8 @@ public class OrderService {
     public OrderDetailsResponse getOrder(Long memberId, Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(OrderErrorCode.ORDER_NOT_FOUND));
+
+        validateOrderOwner(memberId, order);
 
         return OrderDetailsResponse.fromEntity(order);
     }
