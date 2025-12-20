@@ -3,8 +3,12 @@ package com.example.bytemallbackend.domain.order.service;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
 import com.example.bytemallbackend.domain.catalog.product.exception.ProductErrorCode;
 import com.example.bytemallbackend.domain.catalog.product.repository.ProductRepository;
+import com.example.bytemallbackend.domain.delivery.entity.Address;
+import com.example.bytemallbackend.domain.delivery.entity.Delivery;
 import com.example.bytemallbackend.domain.member.entity.Member;
+import com.example.bytemallbackend.domain.member.entity.MemberAddress;
 import com.example.bytemallbackend.domain.member.exception.MemberErrorCode;
+import com.example.bytemallbackend.domain.member.repository.MemberAddressRepository;
 import com.example.bytemallbackend.domain.member.repository.MemberRepository;
 import com.example.bytemallbackend.domain.order.dto.request.OrderItemRequest;
 import com.example.bytemallbackend.domain.order.dto.request.OrderRequest;
@@ -24,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -35,18 +38,33 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final MemberAddressRepository memberAddressRepository;
 
     // 주문 생성
     @Transactional
-    public void createOrder(Long memberId, OrderRequest orderRequest) {
+    public void createOrder(Long memberId, OrderRequest request) {
 
         // 1. 회원 조회
         Member customer = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        // 2-1. 주문 DTO에서 주문 상품 DTO 추출
-        List<OrderItemRequest> orderItemRequests = orderRequest.getOrderItemRequests();
-        // 2.2. 주문 상품 생성 (내부적으로 재고 차감 로직 실행)
+        // 2-1. 배송지 설정 (주소록 ID 사용 or 직접 입력)
+        Address address;
+        if (request.getDeliveryAddressId() != null) {
+            // 저장된 배송지 사용
+            MemberAddress ma = memberAddressRepository.findById(request.getDeliveryAddressId())
+                    .orElseThrow(() -> new BusinessException(MemberErrorCode.ADDRESS_NOT_FOUND));
+            address = ma.getAddress();
+        } else {
+            // 신규 입력 주소 사용
+            address = new Address(request.getZipcode(), request.getRoadAddress(), request.getDetailAddress());
+        }
+        // 2-2. 배송 생성
+        Delivery delivery = Delivery.createDelivery(address);
+
+        // 3-1. 주문 DTO에서 주문 상품 DTO 추출
+        List<OrderItemRequest> orderItemRequests = request.getOrderItemRequests();
+        // 3.2. 주문 상품 생성 (내부적으로 재고 차감 로직 실행)
         List<OrderItem> orderItems = orderItemRequests.stream()
                 .map((orderItem) -> {
                     Product product = productRepository.findById(orderItem.getProductId())
@@ -55,7 +73,7 @@ public class OrderService {
                 })
                 .toList();
 
-        Order order = Order.createOrder(customer, OrderStatus.COMPLETED, orderItems);
+        Order order = Order.createOrder(customer, delivery, orderItems);
         orderRepository.save(order);
     }
 

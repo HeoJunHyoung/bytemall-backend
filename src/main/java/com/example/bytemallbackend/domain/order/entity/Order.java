@@ -1,5 +1,6 @@
 package com.example.bytemallbackend.domain.order.entity;
 
+import com.example.bytemallbackend.domain.delivery.entity.Delivery;
 import com.example.bytemallbackend.domain.member.entity.Member;
 import com.example.bytemallbackend.domain.order.entity.enumerate.OrderStatus;
 import jakarta.persistence.*;
@@ -29,6 +30,10 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "delivery_id")
+    private Delivery delivery;
+
     @Column(name = "order_date")
     private LocalDateTime orderDate;
 
@@ -37,12 +42,14 @@ public class Order {
      */
     protected Order() { }
 
-    public static Order createOrder(Member member, OrderStatus status, List<OrderItem> orderItems) {
+    public static Order createOrder(Member member, Delivery delivery, List<OrderItem> orderItems) {
         Order order = new Order();
 
         order.member = member;
-        order.status = status;
+        order.status = OrderStatus.COMP;
         order.orderDate = LocalDateTime.now();
+
+        order.assignDelivery(delivery);
 
         for (OrderItem orderItem : orderItems) {
             order.assignOrderItem(orderItem);
@@ -57,6 +64,11 @@ public class Order {
     public void assignOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
         orderItem.assignOrder(this);
+    }
+
+    public void assignDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.assignOrder(this);
     }
 
     /**

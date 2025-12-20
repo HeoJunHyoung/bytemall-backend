@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum OrderStatus {
 
-    COMPLETED("주문 완료"),
+    COMP("주문 완료"),
     CANCEL("주문 취소");
 
     private String description;

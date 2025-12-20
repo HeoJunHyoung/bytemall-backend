@@ -14,7 +14,10 @@ public enum MemberErrorCode implements ErrorCode {
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "M-002", "이미 존재하는 회원 아이디입니다."),
 
     // 입력값 검증 (비밀번호 확인 불일치 등)
-    PASSWORD_CONFIRM_MISMATCH(HttpStatus.BAD_REQUEST, "M-003", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+    PASSWORD_CONFIRM_MISMATCH(HttpStatus.BAD_REQUEST, "M-003", "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
+
+    ADDRESS_NOT_FOUND(HttpStatus.NOT_FOUND, "MA-001", "존재하지 않는 주소입니다."),
+    MEMBER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "MA-002", "권한이 없습니다.");
 
     private final HttpStatus status;
     private final String code;
