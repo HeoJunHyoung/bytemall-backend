@@ -1,4 +1,4 @@
-package com.example.bytemallbackend.domain.delivery.entity;
+package com.example.bytemallbackend.global.common;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

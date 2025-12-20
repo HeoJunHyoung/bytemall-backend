@@ -2,6 +2,7 @@ package com.example.bytemallbackend.domain.delivery.entity;
 
 import com.example.bytemallbackend.domain.delivery.entity.enumerate.DeliveryStatus;
 import com.example.bytemallbackend.domain.order.entity.Order;
+import com.example.bytemallbackend.global.common.Address;
 import com.example.bytemallbackend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

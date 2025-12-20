@@ -1,6 +1,6 @@
 package com.example.bytemallbackend.domain.member.entity;
 
-import com.example.bytemallbackend.domain.delivery.entity.Address;
+import com.example.bytemallbackend.global.common.Address;
 import jakarta.persistence.*;
 import lombok.Getter;
 

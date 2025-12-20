@@ -1,6 +1,6 @@
 package com.example.bytemallbackend.domain.member.service;
 
-import com.example.bytemallbackend.domain.delivery.entity.Address;
+import com.example.bytemallbackend.global.common.Address;
 import com.example.bytemallbackend.domain.member.dto.request.MemberAddressCreateRequest;
 import com.example.bytemallbackend.domain.member.dto.response.MemberAddressResponse;
 import com.example.bytemallbackend.domain.member.entity.Member;
@@ -44,7 +44,7 @@ public class MemberAddressService {
                 request.getAddressName(),
                 request.getRecipientName(),
                 request.getPhoneNumber(),
-                new Address(request.getZipcode(), request.getRoadAddress(), request.getDetailAddress()),
+                new Address(request.getZipcode(), request.getRoadAddress(), request.getDetailAddress()), // 임베딩 타입이라서 new Address를 통한 명시적인 객체 생성
                 isDefault
         );
 

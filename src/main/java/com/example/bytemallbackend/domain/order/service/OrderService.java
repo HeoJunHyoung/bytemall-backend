@@ -3,7 +3,7 @@ package com.example.bytemallbackend.domain.order.service;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
 import com.example.bytemallbackend.domain.catalog.product.exception.ProductErrorCode;
 import com.example.bytemallbackend.domain.catalog.product.repository.ProductRepository;
-import com.example.bytemallbackend.domain.delivery.entity.Address;
+import com.example.bytemallbackend.global.common.Address;
 import com.example.bytemallbackend.domain.delivery.entity.Delivery;
 import com.example.bytemallbackend.domain.member.entity.Member;
 import com.example.bytemallbackend.domain.member.entity.MemberAddress;
@@ -16,7 +16,6 @@ import com.example.bytemallbackend.domain.order.dto.response.OrderDetailsRespons
 import com.example.bytemallbackend.domain.order.dto.response.OrderResponse;
 import com.example.bytemallbackend.domain.order.entity.Order;
 import com.example.bytemallbackend.domain.order.entity.OrderItem;
-import com.example.bytemallbackend.domain.order.entity.enumerate.OrderStatus;
 import com.example.bytemallbackend.domain.order.exception.OrderErrorCode;
 import com.example.bytemallbackend.domain.order.repository.OrderRepository;
 import com.example.bytemallbackend.global.error.BusinessException;
@@ -57,7 +56,7 @@ public class OrderService {
 
             // 내 주소가 맞는지 검증
             if (!ma.getMember().getId().equals(memberId)) {
-                throw new BusinessException(MemberErrorCode.ADDRESS_NOT_FOUND); // 혹은 UNAUTHORIZED_ACCESS
+                throw new BusinessException(MemberErrorCode.ADDRESS_NOT_FOUND);
             }
 
             address = ma.getAddress();
