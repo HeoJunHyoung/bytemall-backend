@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class CartItemAddRequest {
 
     private Long productId;
+    private Long optionId;
     private Integer count;
 
 }

@@ -48,7 +48,6 @@ public class Order {
         order.member = member;
         order.status = OrderStatus.COMP;
         order.orderDate = LocalDateTime.now();
-
         order.assignDelivery(delivery);
 
         for (OrderItem orderItem : orderItems) {

@@ -5,6 +5,9 @@ import com.example.bytemallbackend.domain.catalog.product.entity.enumerate.Produ
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Data
 @Builder
 public class ProductSellerDetailsResponse {
@@ -12,26 +15,25 @@ public class ProductSellerDetailsResponse {
     private Long id;
     private String name;
     private Integer price;
-    private Integer stockQuantity;
-    private String description;
     private ProductStatus status;
-
-    // 카테고리 정보 포함
+    private String description;
     private Long categoryId;
     private String categoryName;
-    private String categoryPath;
+
+    private List<OptionResponse> options;
 
     public static ProductSellerDetailsResponse fromEntity(Product entity) {
         return ProductSellerDetailsResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .price(entity.getPrice())
-                .stockQuantity(entity.getStockQuantity())
-                .description(entity.getDescription())
                 .status(entity.getStatus())
+                .description(entity.getDescription())
                 .categoryId(entity.getCategory().getId())
                 .categoryName(entity.getCategory().getName())
-                .categoryPath(entity.getCategory().getPath())
+                .options(entity.getOptions().stream()
+                        .map(OptionResponse::new)
+                        .collect(Collectors.toList()))
                 .build();
     }
 

@@ -20,9 +20,8 @@ public class ProductCustomerResponse {
                 .id(entity.getId())
                 .name(entity.getName())
                 .price(entity.getPrice())
-                .stockQuantity(entity.getStockQuantity())
+                .stockQuantity(entity.getTotalStock())
                 .status(entity.getStatus())
                 .build();
     }
-
 }

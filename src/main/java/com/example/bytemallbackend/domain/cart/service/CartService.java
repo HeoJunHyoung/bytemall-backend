@@ -10,7 +10,9 @@ import com.example.bytemallbackend.domain.cart.exception.CartErrorCode;
 import com.example.bytemallbackend.domain.cart.repository.CartItemRepository;
 import com.example.bytemallbackend.domain.cart.repository.CartRepository;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
+import com.example.bytemallbackend.domain.catalog.product.entity.ProductOption;
 import com.example.bytemallbackend.domain.catalog.product.exception.ProductErrorCode;
+import com.example.bytemallbackend.domain.catalog.product.repository.ProductOptionRepository;
 import com.example.bytemallbackend.domain.catalog.product.repository.ProductRepository;
 import com.example.bytemallbackend.domain.member.entity.Member;
 import com.example.bytemallbackend.domain.member.exception.MemberErrorCode;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final ProductOptionRepository productOptionRepository;
 
     // 장바구니 담기
     @Transactional
@@ -42,10 +46,13 @@ public class CartService {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
 
+        ProductOption option = productOptionRepository.findById(request.getOptionId())
+                .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+
         Cart cart = cartRepository.findByMemberId(memberId)
                 .orElseGet(() -> cartRepository.save(Cart.createCart(member)));
 
-        cart.addCartItem(product, request.getCount());
+        cart.addCartItem(product, option, request.getCount());
     }
 
     // 장바구니 상품 수량 변경

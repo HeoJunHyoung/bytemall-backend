@@ -1,6 +1,7 @@
 package com.example.bytemallbackend.domain.cart.entity;
 
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
+import com.example.bytemallbackend.domain.catalog.product.entity.ProductOption;
 import com.example.bytemallbackend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,21 +23,24 @@ public class CartItem extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_option_id")
+    private ProductOption productOption;
+
     private Integer count;
 
-    // 생성자
     protected CartItem() { }
 
-    private CartItem(Product product, Integer count) {
+    private CartItem(Product product, ProductOption productOption, Integer count) {
         this.product = product;
+        this.productOption = productOption;
         this.count = count;
     }
 
-    public static CartItem createCartItem(Product product, Integer count) {
-        return new CartItem(product, count);
+    public static CartItem createCartItem(Product product, ProductOption option, Integer count) {
+        return new CartItem(product, option, count);
     }
 
-    // 연관관계 편의 메서드
     public void assignCart(Cart cart) {
         this.cart = cart;
     }
@@ -45,7 +49,6 @@ public class CartItem extends BaseEntity {
         this.count += count;
     }
 
-    // 비즈니스 로직
     public void updateCount(Integer count) {
         this.count = count;
     }

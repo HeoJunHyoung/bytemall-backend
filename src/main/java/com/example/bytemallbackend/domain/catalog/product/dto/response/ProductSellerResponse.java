@@ -21,10 +21,9 @@ public class ProductSellerResponse {
                 .id(entity.getId())
                 .name(entity.getName())
                 .price(entity.getPrice())
-                .stockQuantity(entity.getStockQuantity())
+                .stockQuantity(entity.getTotalStock())
                 .status(entity.getStatus())
                 .categoryName(entity.getCategory().getName())
                 .build();
     }
-
 }

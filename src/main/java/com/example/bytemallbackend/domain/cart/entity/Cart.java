@@ -2,6 +2,7 @@ package com.example.bytemallbackend.domain.cart.entity;
 
 
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
+import com.example.bytemallbackend.domain.catalog.product.entity.ProductOption;
 import com.example.bytemallbackend.domain.member.entity.Member;
 import com.example.bytemallbackend.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -45,16 +46,18 @@ public class Cart extends BaseEntity {
     }
 
     // 비즈니스 로직
-    public void addCartItem(Product product, Integer count) {
+    public void addCartItem(Product product, ProductOption option, Integer count) {
 
+        // 동일한 '옵션'이 이미 장바구니에 있는지 확인
         Optional<CartItem> existingItem = this.cartItems.stream()
-                .filter(item -> item.getProduct().getId().equals(product.getId()))
+                .filter(item -> item.getProductOption().getId().equals(option.getId()))
                 .findFirst();
 
         if (existingItem.isPresent()) {
             existingItem.get().addCount(count);
         } else {
-            CartItem newItem = CartItem.createCartItem(product, count);
+            // 새 아이템 생성 시 옵션 객체 전달
+            CartItem newItem = CartItem.createCartItem(product, option, count);
             this.assignCartItem(newItem);
         }
     }
