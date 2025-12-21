@@ -2,7 +2,9 @@ package com.example.bytemallbackend.domain.order.service;
 
 import com.example.bytemallbackend.domain.cart.service.CartService;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
+import com.example.bytemallbackend.domain.catalog.product.entity.ProductOption;
 import com.example.bytemallbackend.domain.catalog.product.exception.ProductErrorCode;
+import com.example.bytemallbackend.domain.catalog.product.repository.ProductOptionRepository;
 import com.example.bytemallbackend.domain.catalog.product.repository.ProductRepository;
 import com.example.bytemallbackend.global.common.Address;
 import com.example.bytemallbackend.domain.delivery.entity.Delivery;
@@ -38,6 +40,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final ProductOptionRepository productOptionRepository;
     private final MemberAddressRepository memberAddressRepository;
     private final CartService cartService;
 
@@ -73,10 +76,17 @@ public class OrderService {
         List<OrderItemRequest> orderItemRequests = request.getOrderItemRequests();
         // 3.2. 주문 상품 생성 (내부적으로 재고 차감 로직 실행)
         List<OrderItem> orderItems = orderItemRequests.stream()
-                .map((orderItem) -> {
-                    Product product = productRepository.findById(orderItem.getProductId())
+                .map((req) -> {
+                    // (1) 상품 조회
+                    Product product = productRepository.findById(req.getProductId())
                             .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
-                    return OrderItem.createOrderItem(product, orderItem.getCount());
+
+                    // (2) 옵션 조회
+                    ProductOption option = productOptionRepository.findById(req.getOptionId())
+                            .orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+
+                    // (3) 상품 + 옵션으로 주문 항목 생성 (내부에서 option.removeStock 실행됨)
+                    return OrderItem.createOrderItem(product, option, req.getCount());
                 })
                 .toList();
 
@@ -92,7 +102,6 @@ public class OrderService {
             // CartService에 해당 상품 삭제 요청
             cartService.removeCartItemsByProductIds(memberId, orderedProductIds);
         }
-
     }
 
     // 주문 취소

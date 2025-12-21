@@ -3,11 +3,13 @@ package com.example.bytemallbackend.domain.catalog.product.service;
 import com.example.bytemallbackend.domain.catalog.category.entity.Category;
 import com.example.bytemallbackend.domain.catalog.category.exception.CategoryErrorCode;
 import com.example.bytemallbackend.domain.catalog.category.repository.CategoryRepository;
+import com.example.bytemallbackend.domain.catalog.product.dto.request.OptionDto;
 import com.example.bytemallbackend.domain.catalog.product.dto.request.ProductCreateRequest;
 import com.example.bytemallbackend.domain.catalog.product.dto.request.ProductUpdateRequest;
 import com.example.bytemallbackend.domain.catalog.product.dto.response.ProductSellerDetailsResponse;
 import com.example.bytemallbackend.domain.catalog.product.dto.response.ProductSellerResponse;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
+import com.example.bytemallbackend.domain.catalog.product.entity.ProductOption;
 import com.example.bytemallbackend.domain.catalog.product.exception.ProductErrorCode;
 import com.example.bytemallbackend.domain.catalog.product.repository.ProductRepository;
 import com.example.bytemallbackend.domain.member.entity.Member;
@@ -40,14 +42,27 @@ public class ProductSellerService {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new BusinessException(CategoryErrorCode.CATEGORY_NOT_FOUND));
 
+        // 1. 상품 객체 생성 (옵션 없이)
         Product product = Product.of(
                 request.getProductName(),
                 request.getPrice(),
-                request.getStockQuantity(),
                 request.getDescription(),
                 category,
                 seller
         );
+
+        // 2. 옵션 추가
+        if (request.getOptions() != null && !request.getOptions().isEmpty()) {
+            for (OptionDto optionDto : request.getOptions()) {
+                ProductOption option = ProductOption.createOption(
+                        product,
+                        optionDto.getOptionName(),
+                        optionDto.getExtraPrice(),
+                        optionDto.getStockQuantity()
+                );
+                product.assignOption(option);
+            }
+        }
 
         productRepository.save(product);
     }
@@ -65,7 +80,6 @@ public class ProductSellerService {
         product.update(
                 request.getName(),
                 request.getPrice(),
-                request.getStockQuantity(),
                 request.getDescription(),
                 request.getStatus(),
                 category

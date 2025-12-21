@@ -1,6 +1,7 @@
 package com.example.bytemallbackend.domain.order.entity;
 
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
+import com.example.bytemallbackend.domain.catalog.product.entity.ProductOption;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -21,6 +22,10 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_option_id")
+    private ProductOption productOption;
+
     private Integer price;
     private Integer count;
 
@@ -33,23 +38,34 @@ public class OrderItem {
     // 생성자
     protected OrderItem() { }
 
-    public static OrderItem createOrderItem(Product product,Integer count) {
-        product.removeStock(count);
-        return new OrderItem(product, product.getPrice(), count);
+    public static OrderItem createOrderItem(Product product, ProductOption option, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.product = product;
+        orderItem.productOption = option;
+        orderItem.count = count;
+
+        // 가격 계산: (상품기본가 + 옵션추가금) * 수량
+        int price = product.getPrice() + (option != null ? option.getExtraPrice() : 0);
+        orderItem.price = price * count;
+
+        // 상품 재고가 아니라 '옵션 재고'를 차감
+        if (option != null) {
+            option.removeStock(count);
+        }
+
+        return orderItem;
+    }
+
+    //  주문 취소 시 재고 복구 로직
+    public void cancel() {
+        if (this.productOption != null) {
+            this.productOption.addStock(count);
+        }
     }
 
     // 연관관계 메서드
     public void assignOrder(Order order) {
         this.order = order;
-    }
-
-    // 비즈니스 로직
-    public void cancel() {
-        this.product.addStock(count);
-    }
-
-    public Integer getTotalPrice() {
-        return this.price * this.count;
     }
 
 }

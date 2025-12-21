@@ -9,6 +9,8 @@ public class OrderItemRequest {
 
     private Long productId;
 
+    private Long optionId;
+
     private Integer count;
 
 }
