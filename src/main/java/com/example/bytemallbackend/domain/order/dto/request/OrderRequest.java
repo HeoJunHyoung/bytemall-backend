@@ -17,4 +17,5 @@ public class OrderRequest {
 
     private List<OrderItemRequest> orderItemRequests;
 
+    private boolean fromCart;
 }

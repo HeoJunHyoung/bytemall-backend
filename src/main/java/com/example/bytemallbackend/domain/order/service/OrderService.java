@@ -1,5 +1,6 @@
 package com.example.bytemallbackend.domain.order.service;
 
+import com.example.bytemallbackend.domain.cart.service.CartService;
 import com.example.bytemallbackend.domain.catalog.product.entity.Product;
 import com.example.bytemallbackend.domain.catalog.product.exception.ProductErrorCode;
 import com.example.bytemallbackend.domain.catalog.product.repository.ProductRepository;
@@ -38,6 +39,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final MemberAddressRepository memberAddressRepository;
+    private final CartService cartService;
 
     // 주문 생성
     @Transactional
@@ -80,6 +82,17 @@ public class OrderService {
 
         Order order = Order.createOrder(customer, delivery, orderItems);
         orderRepository.save(order);
+
+        if (request.isFromCart()) {
+            // 주문한 상품 ID 목록 추출
+            List<Long> orderedProductIds = request.getOrderItemRequests().stream()
+                    .map(OrderItemRequest::getProductId)
+                    .toList();
+
+            // CartService에 해당 상품 삭제 요청
+            cartService.removeCartItemsByProductIds(memberId, orderedProductIds);
+        }
+
     }
 
     // 주문 취소

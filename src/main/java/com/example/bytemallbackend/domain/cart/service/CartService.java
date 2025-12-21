@@ -86,10 +86,12 @@ public class CartService {
 
     // 장바구니 비우기
     @Transactional
-    public void clearCart(Long memberId) {
+    public void removeCartItemsByProductIds(Long memberId, List<Long> productIds) {
         Cart cart = cartRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new BusinessException(CartErrorCode.CART_NOT_FOUND));
-        cart.getCartItems().clear();
+
+        // 해당 상품 ID들을 장바구니 리스트에서 제거 (orphanRemoval로 인해 DB 삭제)
+        cart.getCartItems().removeIf(item -> productIds.contains(item.getProduct().getId()));
     }
 
     // 장바구니 조회

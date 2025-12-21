@@ -35,14 +35,11 @@ public class CartController {
     }
 
     // 장바구니 상품 제거
-    @DeleteMapping("/items/")
+    @DeleteMapping("/items")
     public ResponseEntity<Void> deleteCartItems(@AuthenticationPrincipal AuthMember authMember, @RequestBody List<CartItemDeleteRequest> requests) {
         cartService.deleteCartItems(authMember.getId(), requests);
         return ResponseEntity.ok().build();
     }
-
-    // 장바구니 상품 비우기
-
 
     // 장바구니 상품 조회
     @GetMapping
