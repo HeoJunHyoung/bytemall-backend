@@ -74,4 +74,10 @@ public class Product extends BaseEntity {
         option.assignProduct(this);
     }
 
+    public Integer getTotalStock() {
+        return this.options.stream()
+                .mapToInt(ProductOption::getStockQuantity)
+                .sum();
+    }
+
 }

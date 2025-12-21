@@ -11,26 +11,32 @@ public class OrderItemResponse {
 
     private Long orderItemId;
     private String productName;
+    private String optionName;
     private Integer price;
     private Integer count;
     private Integer totalPrice;
 
-    private OrderItemResponse(Long orderItemId, String productName, Integer price, Integer count, Integer totalPrice) {
+    private OrderItemResponse(Long orderItemId, String productName, String optionName, Integer price, Integer count, Integer totalPrice) {
         this.orderItemId = orderItemId;
         this.productName = productName;
+        this.optionName = optionName;
         this.price = price;
         this.count = count;
         this.totalPrice = totalPrice;
     }
 
     public static OrderItemResponse fromEntity(OrderItem orderItem) {
+        String optName = (orderItem.getProductOption() != null)
+                ? orderItem.getProductOption().getOptionName()
+                : "기본 옵션";
+
         return new OrderItemResponse(
                 orderItem.getId(),
                 orderItem.getProduct().getName(),
-                orderItem.getPrice(),
+                optName,
+                orderItem.getOrderPrice(),
                 orderItem.getCount(),
                 orderItem.getTotalPrice()
         );
     }
-
 }
