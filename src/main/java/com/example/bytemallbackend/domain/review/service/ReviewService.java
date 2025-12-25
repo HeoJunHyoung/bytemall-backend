@@ -38,8 +38,8 @@ public class ReviewService {
      */
     public void createReview(Long memberId, ReviewCreateRequest request) {
         // 1. 주문 상품 조회
-        OrderItem orderItem = orderItemRepository.findById(request.getOrderItemId())
-                .orElseThrow(() -> new BusinessException(OrderErrorCode.ORDER_ITEM_NOT_FOUND));
+        OrderItem orderItem = orderItemRepository.findByIdWithOrderAndMember(request.getOrderItemId())
+                .orElseThrow(() -> new BusinessException(ReviewErrorCode.ORDER_ITEM_NOT_FOUND));
 
         // 2. 권한 검증: 리뷰 작성자가 실제 주문자인지 확인
         if (!orderItem.getOrder().getMember().getId().equals(memberId)) {
@@ -47,9 +47,9 @@ public class ReviewService {
         }
 
         // 3. 배송 상태 검증: 배송 완료(COMP)된 상품만 리뷰 작성 가능
-        if (orderItem.getOrder().getDelivery().getStatus() != DeliveryStatus.COMP) {
-            throw new BusinessException(ReviewErrorCode.REVIEW_NOT_DELIVERED);
-        }
+//        if (orderItem.getOrder().getDelivery().getStatus() != DeliveryStatus.COMP) {
+//            throw new BusinessException(ReviewErrorCode.REVIEW_NOT_DELIVERED);
+//        }
 
         // 4. 중복 작성 검증
         if (reviewRepository.existsByOrderItem(orderItem)) {

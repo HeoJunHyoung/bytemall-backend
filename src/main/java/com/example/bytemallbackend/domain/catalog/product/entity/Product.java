@@ -45,10 +45,10 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> options = new ArrayList<>();
 
-    @Column(name = "review_count", nullable = false)
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long reviewCount = 0L;
 
-    @Column(name = "average_rating", nullable = false)
+    @Column(nullable = false, columnDefinition = "DOUBLE DEFAULT 0.0")
     private Double averageRating = 0.0;
 
     //== 생성자 ==//
