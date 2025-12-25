@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 public enum OrderErrorCode implements ErrorCode {
 
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "O-001", "존재하지 않는 주문입니다."),
+    ORDER_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "O-002", "해당 상품을 주문하지 않았습니다."),
     UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "O-006", "해당 주문을 취소할 권한이 없습니다.");
 
     private final HttpStatus status;

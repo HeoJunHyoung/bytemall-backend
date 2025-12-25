@@ -14,6 +14,8 @@ public class ProductCustomerResponse {
     private Integer price;
     private Integer stockQuantity;
     private ProductStatus status;
+    private Long reviewCount;
+    private Double averageRating;
 
     public static ProductCustomerResponse fromEntity(Product entity) {
         return ProductCustomerResponse.builder()
@@ -22,6 +24,8 @@ public class ProductCustomerResponse {
                 .price(entity.getPrice())
                 .stockQuantity(entity.getTotalStock())
                 .status(entity.getStatus())
+                .reviewCount(entity.getReviewCount())
+                .averageRating(entity.getAverageRating())
                 .build();
     }
 }

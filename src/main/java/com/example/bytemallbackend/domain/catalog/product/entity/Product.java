@@ -44,6 +44,14 @@ public class Product extends BaseEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductOption> options = new ArrayList<>();
+
+    @Column(name = "review_count", nullable = false)
+    private Long reviewCount = 0L;
+
+    @Column(name = "average_rating", nullable = false)
+    private Double averageRating = 0.0;
+
+    //== 생성자 ==//
     protected Product() { }
 
     private Product(String name, Integer price, String description, ProductStatus status, Category category, Member seller) {
@@ -66,6 +74,12 @@ public class Product extends BaseEntity {
         if (description != null) this.description = description;
         if (status != null) this.status = status;
         if (category != null) this.category = category;
+    }
+
+    // 리뷰 통계 업데이트 메서드
+    public void updateReviewStats(Long count, Double rating) {
+        this.reviewCount = count;
+        this.averageRating = rating;
     }
 
     // 연관관계 편의 메서드
