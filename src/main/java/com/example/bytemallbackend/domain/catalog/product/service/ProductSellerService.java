@@ -101,7 +101,7 @@ public class ProductSellerService {
         List<Product> sellerProducts = productRepository.findBySellerId(sellerId);
 
         return sellerProducts.stream()
-                .map(product -> ProductSellerResponse.fromEntity(product))
+                .map(ProductSellerResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 

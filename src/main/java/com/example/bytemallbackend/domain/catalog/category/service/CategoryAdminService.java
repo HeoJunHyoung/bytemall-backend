@@ -31,16 +31,16 @@ public class CategoryAdminService {
     public Long createCategory(CategoryCreateRequest request) {
 
         Category parentCategory = null;
-        Integer depth = 1; // 최상위 카테고리를 만들 수도 있기 때문에 기본값을 1로 설정
+        Integer depth = 1; // 최상위 카테고리(루트 카테고리 바로 하위 카테고리)를 만들 수도 있기 때문에 기본값을 1로 설정
 
-        // 1.부모 카테고리 조회 및 Depth 설정
+        // 1.부모 카테고리 조회 및 [Depth] 설정
         if (request.getParentId() != null) {
             parentCategory = categoryRepository.findById(request.getParentId())
                     .orElseThrow(() -> new BusinessException(CategoryErrorCode.CATEGORY_NOT_FOUND));
             depth = parentCategory.getDepth() + 1;
         }
 
-        // 2. 순서(DisplayOrder) 계산 로직 (카테고리 생성 시 강제적으로 마지막 순서로 지정)
+        // 2. 순서[DisplayOrder] 계산 로직 (카테고리 생성 시 강제적으로 마지막 순서로 지정)
         Integer maxDisplayOrder;
         if (parentCategory != null) {
             // 하위 카테고리인 경우: 부모가 같은 형제 카테고리들의 마지막(Max) displayOrder
