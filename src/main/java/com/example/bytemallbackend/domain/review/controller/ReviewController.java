@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -26,7 +25,7 @@ public class ReviewController {
     /**
      * 리뷰 등록
      */
-    @PostMapping
+    @PostMapping("/api/reviews")
     public ResponseEntity<Void> createReview(@AuthenticationPrincipal AuthMember authMember,
                                              @RequestBody ReviewCreateRequest request) {
         reviewService.createReview(authMember.getId(), request);
@@ -36,7 +35,7 @@ public class ReviewController {
     /**
      * 리뷰 목록 조회
      */
-    @GetMapping("/products/{productId}/reviews")
+    @GetMapping("/api/products/{productId}/reviews")
     public ResponseEntity<Page<ReviewResponse>> getProductReviews(
             @PathVariable Long productId,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
@@ -48,7 +47,7 @@ public class ReviewController {
     /**
      * 리뷰 상세 조회
      */
-    @GetMapping("/reviews/{reviewId}")
+    @GetMapping("/api/reviews/{reviewId}")
     public ResponseEntity<ReviewDetailResponse> getReviewDetail(@PathVariable Long reviewId) {
         ReviewDetailResponse response = reviewService.getReviewDetail(reviewId);
         return ResponseEntity.ok(response);

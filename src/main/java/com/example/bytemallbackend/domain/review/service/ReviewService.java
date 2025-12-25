@@ -22,10 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -36,6 +38,7 @@ public class ReviewService {
     /**
      * 리뷰 작성
      */
+    @Transactional
     public void createReview(Long memberId, ReviewCreateRequest request) {
         // 1. 주문 상품 조회
         OrderItem orderItem = orderItemRepository.findByIdWithOrderAndMember(request.getOrderItemId())
